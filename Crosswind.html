@@ -2,74 +2,77 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <title>Kalkulator wiatru </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator wiatru</title>
 <style>
+  /* BODY */
   body {
     font-family: 'Inter', system-ui, sans-serif;
     background: #121212;
     color: #e5e7eb;
-    max-width: 580px;
     width: 100%;
-    margin: 1rem auto;
-    padding: 1.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease;
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 16px;
+    box-sizing: border-box;
   }
 
   h2 {
+    text-align: center;
+    font-size: 1.6rem;
     margin-bottom: 1rem;
     font-weight: 600;
-    font-size: 1.5rem;
-    color: #f9fafb;
-    text-align: center;
   }
 
+  /* CONTROLS */
   .controls {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 12px;
   }
 
   label {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 500;
-    color: #d1d5db;
-    margin-bottom: 0.25rem;
+    margin-bottom: 4px;
     display: block;
+    color: #d1d5db;
   }
 
   input {
-    width: 95%;
-    padding: 0.5rem 0.75rem;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
     border: 1px solid #374151;
-    border-radius: 0.5rem;
     background: #1f2937;
     color: #f9fafb;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    box-sizing: border-box;
   }
 
   input:focus {
     border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.3);
     outline: none;
   }
 
+  /* BUTTONS */
   .buttons {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 8px;
+    margin-top: 8px;
   }
 
-  /* Przycisk ciemnoszary */
   button {
-    padding: 0.6rem 1rem;
+    padding: 12px;
+    border-radius: 8px;
     border: none;
-    border-radius: 0.5rem;
-    background: linear-gradient(135deg, #4b5563, #374151);
-    color: #fff;
+    font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
+    color: #fff;
+    background: linear-gradient(135deg,#4b5563,#374151);
     transition: transform 0.2s, filter 0.2s;
   }
 
@@ -82,11 +85,12 @@
     background: #1f2937;
   }
 
+  /* COMPASS */
   .layout {
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    gap: 16px;
   }
 
   .compass-wrap {
@@ -95,113 +99,116 @@
     align-items: center;
   }
 
-  .result {
-    background: #1f2937;
-    padding: 1rem;
-    border-radius: 0.75rem;
-    min-width: 95%;
-    color: #e5e7eb;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  }
-
-  .result p { margin: 0.5rem 0; padding-left: 1rem; }
-  .result strong { display: inline-block; width: 180px; }
-
   svg {
-    width: 90%;
+    width: 100%;
     max-width: 300px;
     height: auto;
-    display: block;
-    margin: 0 auto;
     border-radius: 50%;
     background: #1f2937;
   }
 
-  #compass circle { fill: #1f2937; stroke: #374151; stroke-width: 2; }
-  #compass text { fill: #f9fafb; font-weight: 700; }
-  #ticks line { stroke: #9ca3af; stroke-width: 1.5; }
-  #ticks text { fill: #f9fafb; font-size: 10px; }
-  #windVector { stroke: #3b82f6; stroke-width: 4; }
-  #courseVector { stroke: #ef4444; stroke-width: 4; }
-
-  .legend { text-align: center; margin-top: 0.5rem; font-size: 0.85rem; color: #9ca3af; }
-  .dot { display: inline-block; width: 12px; height: 12px; vertical-align: middle; margin-right: 0.5rem; border-radius: 2px; }
-  hr { border: none; border-top: 1px solid #374151; margin: 0.25rem 0; }
-
-  /* Skalowanie responsywne powyżej 500px */
-  @media (min-width: 500px) {
-    body {
-      transform: scale(calc(480 / 100 * (100vw - 20) / 480));
-      transform-origin: top center;
-    }
+  .result {
+    width: 100%;
+    background: #1f2937;
+    border-radius: 12px;
+    padding: 12px;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   }
-</style>
 
+  .result p {
+    margin: 6px 0;
+    padding-left: 6px;
+  }
+
+  .result strong {
+    display: inline-block;
+    width: 130px;
+  }
+
+  .legend {
+    text-align: center;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: #9ca3af;
+  }
+
+  .dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    vertical-align: middle;
+    margin-right: 4px;
+    border-radius: 2px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #374151;
+    margin: 4px 0;
+  }
+
+</style>
 </head>
 <body>
-<h2>Kalkulator składowych wiatru</h2>
+  <h2>Kalkulator składowych wiatru</h2>
 
-<div class="controls">
-  <div>
-    <label>Kierunek wiatru (° skąd wieje)</label>
-    <input id="windDir" type="number" min="0" max="360" placeholder="wpisz kierunek wiatru">
-  </div>
-  <div>
-    <label>Prędkość wiatru (kt)</label>
-    <input id="windSpeed" type="number" min="0" placeholder="wpisz prędkość wiatru">
-  </div>
-  <div>
-    <label>Prędkość podróżna (TAS, kt)</label>
-    <input id="tas" type="number" min="0" placeholder="wpisz prędkość podróżną">
-  </div>
-  <div>
-    <label>Kierunek kursu (° geograficzne)</label>
-    <input id="course" type="number" min="0" max="360" placeholder="wpisz kierunek kursu">
-  </div>
+  <div class="controls">
+    <div>
+      <label>Kierunek wiatru (° skąd wieje)</label>
+      <input id="windDir" type="number" min="0" max="360" placeholder="np. 270">
+    </div>
+    <div>
+      <label>Prędkość wiatru (kt)</label>
+      <input id="windSpeed" type="number" min="0" placeholder="np. 15">
+    </div>
+    <div>
+      <label>Prędkość podróżna (TAS, kt)</label>
+      <input id="tas" type="number" min="0" placeholder="np. 120">
+    </div>
+    <div>
+      <label>Kierunek kursu (° geograficzne)</label>
+      <input id="course" type="number" min="0" max="360" placeholder="np. 90">
+    </div>
 
-  <div class="buttons">
-    <button id="compute">Oblicz i narysuj</button>
-    <button id="reset" class="secondary">Wyczyść</button>
-  </div>
-</div>
-
-<div class="layout">
-  <div class="compass-wrap">
-    <svg id="compass" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" aria-label="Kompas">
-      <defs>
-        <marker id="arrowHeadBlue" markerWidth="4" markerHeight="6" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
-          <path d="M0,0 L0,6 L4,3 z" fill="#3b82f6"></path>
-        </marker>
-        <marker id="arrowHeadRed" markerWidth="4" markerHeight="6" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
-          <path d="M0,0 L0,6 L4,3 z" fill="#ef4444"></path>
-        </marker>
-      </defs>
-
-      <circle cx="180" cy="180" r="140"/>
-      <circle cx="180" cy="180" r="4" fill="#f9fafb"/>
-
-      <!-- Oddalone litery N/E/S/W -->
-      <text x="180" y="24" text-anchor="middle" font-size="14">N</text>
-      <text x="342" y="186" text-anchor="middle" font-size="14">E</text>
-      <text x="180" y="346" text-anchor="middle" font-size="14">S</text>
-      <text x="18" y="186" text-anchor="middle" font-size="14">W</text>
-
-      <g id="ticks"></g>
-
-      <line id="windVector" x1="180" y1="180" x2="180" y2="40" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" marker-end="url(#arrowHeadBlue)" />
-      <line id="courseVector" x1="180" y1="180" x2="180" y2="40" stroke="#ef4444" stroke-width="4" stroke-linecap="round" marker-end="url(#arrowHeadRed)" />
-    </svg>
-
-    <div class="legend">
-      <span class="dot" style="background:#3b82f6"></span> Kierunek wiatru &nbsp;&nbsp;
-      <span class="dot" style="background:#ef4444"></span> Kierunek lotu
+    <div class="buttons">
+      <button id="compute">Oblicz i narysuj</button>
+      <button id="reset" class="secondary">Wyczyść</button>
     </div>
   </div>
 
-  <div class="result" id="output">
-    <p><em>Wprowadź dane i kliknij „Oblicz i narysuj”.</em></p>
+  <div class="layout">
+    <div class="compass-wrap">
+      <svg id="compass" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" aria-label="Kompas">
+        <defs>
+          <marker id="arrowHeadBlue" markerWidth="4" markerHeight="6" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L4,3 z" fill="#3b82f6"/>
+          </marker>
+          <marker id="arrowHeadRed" markerWidth="4" markerHeight="6" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L4,3 z" fill="#ef4444"/>
+          </marker>
+        </defs>
+
+        <circle cx="180" cy="180" r="140"/>
+        <circle cx="180" cy="180" r="4" fill="#f9fafb"/>
+        <text x="180" y="24" text-anchor="middle" font-size="14">N</text>
+        <text x="342" y="186" text-anchor="middle" font-size="14">E</text>
+        <text x="180" y="346" text-anchor="middle" font-size="14">S</text>
+        <text x="18" y="186" text-anchor="middle" font-size="14">W</text>
+        <g id="ticks"></g>
+        <line id="windVector" x1="180" y1="180" x2="180" y2="40" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" marker-end="url(#arrowHeadBlue)" />
+        <line id="courseVector" x1="180" y1="180" x2="180" y2="40" stroke="#ef4444" stroke-width="4" stroke-linecap="round" marker-end="url(#arrowHeadRed)" />
+      </svg>
+      <div class="legend">
+        <span class="dot" style="background:#3b82f6"></span> Kierunek wiatru &nbsp;&nbsp;
+        <span class="dot" style="background:#ef4444"></span> Kierunek lotu
+      </div>
+    </div>
+
+    <div class="result" id="output">
+      <p><em>Wprowadź dane i kliknij „Oblicz i narysuj”.</em></p>
+    </div>
   </div>
-</div>
 
 <script>
 function degToRadSVG(deg) { return (deg - 90) * Math.PI / 180; }
