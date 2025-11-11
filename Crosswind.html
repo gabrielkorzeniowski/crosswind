@@ -2,194 +2,287 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <title>Kalkulator wiatru — uproszczone wyniki</title>
-  <style>
+  <title>Kalkulator wiatru </title>
+<style>
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #121212;
+    color: #e5e7eb;
+    max-width: 580px;
+    width: 100%;
+    margin: 1rem auto;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #f9fafb;
+    text-align: center;
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #d1d5db;
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+
+  input {
+    width: 95%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #374151;
+    border-radius: 0.5rem;
+    background: #1f2937;
+    color: #f9fafb;
+    font-size: 0.9rem;
+  }
+
+  input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    outline: none;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Przycisk ciemnoszary */
+  button {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, #4b5563, #374151);
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s, filter 0.2s;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+  }
+
+  button.secondary {
+    background: #1f2937;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .compass-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .result {
+    background: #1f2937;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    min-width: 95%;
+    color: #e5e7eb;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+
+  .result p { margin: 0.5rem 0; padding-left: 1rem; }
+  .result strong { display: inline-block; width: 180px; }
+
+  svg {
+    width: 90%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: #1f2937;
+  }
+
+  #compass circle { fill: #1f2937; stroke: #374151; stroke-width: 2; }
+  #compass text { fill: #f9fafb; font-weight: 700; }
+  #ticks line { stroke: #9ca3af; stroke-width: 1.5; }
+  #ticks text { fill: #f9fafb; font-size: 10px; }
+  #windVector { stroke: #3b82f6; stroke-width: 4; }
+  #courseVector { stroke: #ef4444; stroke-width: 4; }
+
+  .legend { text-align: center; margin-top: 0.5rem; font-size: 0.85rem; color: #9ca3af; }
+  .dot { display: inline-block; width: 12px; height: 12px; vertical-align: middle; margin-right: 0.5rem; border-radius: 2px; }
+  hr { border: none; border-top: 1px solid #374151; margin: 0.25rem 0; }
+
+  /* Skalowanie responsywne powyżej 500px */
+  @media (min-width: 500px) {
     body {
-      font-family: system-ui, sans-serif;
-      background: #f8fafc;
-      color: #111;
-      max-width: 900px;
-      margin: 28px auto;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      transform: scale(calc(480 / 100 * (100vw - 20) / 480));
+      transform-origin: top center;
     }
-    h2 { margin-bottom: 6px; }
-    .controls {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      align-items: end;
-    }
-    label { font-size: 13px; }
-    input { width: 100%; padding: 6px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; }
-    .buttons { grid-column: 1 / -1; display:flex; gap:8px; }
-    button { padding: 8px 12px; border: none; border-radius: 8px; background: #2563eb; color: white; cursor: pointer; }
-    button.secondary { background: #6b7280; }
-    .layout { display:flex; gap:18px; margin-top: 16px; flex-wrap: wrap; }
-    .compass-wrap { flex: 0 0 380px; }
-    .result { flex: 1 1 420px; background: #eef2ff; padding: 12px; border-radius: 8px; min-width: 260px; }
-    .result p { margin: 6px 0; padding-left: 24px; } /* przesunięcie w prawo */
-    .result strong { display:inline-block; width: 220px; }
-    svg { width: 380px; height: 380px; display:block; margin: 0 auto; }
-    .legend { text-align:center; margin-top:10px; font-size:14px; }
-    .dot { display:inline-block; width:12px; height:12px; vertical-align:middle; margin-right:6px; border-radius:2px; }
-    hr { border: none; border-top: 1px solid #cbd5e1; margin:4px 0;}
-  </style>
+  }
+</style>
+
 </head>
 <body>
-  <h2>Kalkulator składowych wiatru</h2>
+<h2>Kalkulator składowych wiatru</h2>
 
-  <div class="controls">
-    <div>
-      <label>Kierunek wiatru (° skąd wieje)</label>
-      <input id="windDir" type="number" min="0" max="360" placeholder="np. 270">
-    </div>
-    <div>
-      <label>Prędkość wiatru (kt)</label>
-      <input id="windSpeed" type="number" min="0" placeholder="np. 15">
-    </div>
-    <div>
-      <label>Prędkość podróżna (TAS, kt)</label>
-      <input id="tas" type="number" min="0" placeholder="np. 120">
-    </div>
-    <div>
-      <label>Kierunek kursu (° geograficzne)</label>
-      <input id="course" type="number" min="0" max="360" placeholder="np. 90">
-    </div>
+<div class="controls">
+  <div>
+    <label>Kierunek wiatru (° skąd wieje)</label>
+    <input id="windDir" type="number" min="0" max="360" placeholder="wpisz kierunek wiatru">
+  </div>
+  <div>
+    <label>Prędkość wiatru (kt)</label>
+    <input id="windSpeed" type="number" min="0" placeholder="wpisz prędkość wiatru">
+  </div>
+  <div>
+    <label>Prędkość podróżna (TAS, kt)</label>
+    <input id="tas" type="number" min="0" placeholder="wpisz prędkość podróżną">
+  </div>
+  <div>
+    <label>Kierunek kursu (° geograficzne)</label>
+    <input id="course" type="number" min="0" max="360" placeholder="wpisz kierunek kursu">
+  </div>
 
-    <div class="buttons">
-      <button id="compute">Oblicz i narysuj</button>
-      <button id="reset" class="secondary">Wyczyść</button>
+  <div class="buttons">
+    <button id="compute">Oblicz i narysuj</button>
+    <button id="reset" class="secondary">Wyczyść</button>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="compass-wrap">
+    <svg id="compass" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" aria-label="Kompas">
+      <defs>
+        <marker id="arrowHeadBlue" markerWidth="4" markerHeight="6" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L4,3 z" fill="#3b82f6"></path>
+        </marker>
+        <marker id="arrowHeadRed" markerWidth="4" markerHeight="6" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L4,3 z" fill="#ef4444"></path>
+        </marker>
+      </defs>
+
+      <circle cx="180" cy="180" r="140"/>
+      <circle cx="180" cy="180" r="4" fill="#f9fafb"/>
+
+      <!-- Oddalone litery N/E/S/W -->
+      <text x="180" y="24" text-anchor="middle" font-size="14">N</text>
+      <text x="342" y="186" text-anchor="middle" font-size="14">E</text>
+      <text x="180" y="346" text-anchor="middle" font-size="14">S</text>
+      <text x="18" y="186" text-anchor="middle" font-size="14">W</text>
+
+      <g id="ticks"></g>
+
+      <line id="windVector" x1="180" y1="180" x2="180" y2="40" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" marker-end="url(#arrowHeadBlue)" />
+      <line id="courseVector" x1="180" y1="180" x2="180" y2="40" stroke="#ef4444" stroke-width="4" stroke-linecap="round" marker-end="url(#arrowHeadRed)" />
+    </svg>
+
+    <div class="legend">
+      <span class="dot" style="background:#3b82f6"></span> Kierunek wiatru &nbsp;&nbsp;
+      <span class="dot" style="background:#ef4444"></span> Kierunek lotu
     </div>
   </div>
 
-  <div class="layout">
-    <div class="compass-wrap">
-      <svg id="compass" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" aria-label="Kompas">
-        <defs>
-          <marker id="arrowHeadBlue" markerWidth="6" markerHeight="8" refX="0" refY="4" orient="auto" markerUnits="strokeWidth">
-            <path d="M0,0 L0,8 L6,4 z" fill="blue"></path>
-          </marker>
-          <marker id="arrowHeadRed" markerWidth="6" markerHeight="8" refX="0" refY="4" orient="auto" markerUnits="strokeWidth">
-            <path d="M0,0 L0,8 L6,4 z" fill="red"></path>
-          </marker>
-        </defs>
-
-        <circle cx="180" cy="180" r="140" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
-        <circle cx="180" cy="180" r="4" fill="#111"/>
-
-        <text x="180" y="36" text-anchor="middle" font-weight="700">N</text>
-        <text x="322" y="186" text-anchor="middle" font-weight="700">E</text>
-        <text x="180" y="334" text-anchor="middle" font-weight="700">S</text>
-        <text x="38" y="186" text-anchor="middle" font-weight="700">W</text>
-
-        <g id="ticks"></g>
-
-        <g stroke="#e6e9ef" stroke-width="1">
-          <line x1="180" y1="180" x2="180" y2="40"/>
-          <line x1="180" y1="180" x2="320" y2="180"/>
-          <line x1="180" y1="180" x2="180" y2="320"/>
-          <line x1="180" y1="180" x2="40" y2="180"/>
-        </g>
-
-        <line id="windVector" x1="180" y1="180" x2="180" y2="40"
-              stroke="blue" stroke-width="4" stroke-linecap="round" marker-end="url(#arrowHeadBlue)" opacity="0.95"/>
-        <line id="courseVector" x1="180" y1="180" x2="180" y2="40"
-              stroke="red" stroke-width="4" stroke-linecap="round" marker-end="url(#arrowHeadRed)" opacity="0.95"/>
-      </svg>
-
-      <div class="legend">
-        <span class="dot" style="background:blue"></span> Kierunek wiatru &nbsp;&nbsp;
-        <span class="dot" style="background:red"></span> Kierunek lotu
-      </div>
-    </div>
-
-    <div class="result" id="output">
-      <p><em>Wprowadź dane i kliknij „Oblicz i narysuj”.</em></p>
-    </div>
+  <div class="result" id="output">
+    <p><em>Wprowadź dane i kliknij „Oblicz i narysuj”.</em></p>
   </div>
+</div>
 
-  <script>
-    function degToRadSVG(deg) { return (deg - 90) * Math.PI / 180; }
-    function pointOnCircle(cx, cy, r, deg) {
-      const rad = degToRadSVG(deg);
-      return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+<script>
+function degToRadSVG(deg) { return (deg - 90) * Math.PI / 180; }
+function pointOnCircle(cx, cy, r, deg) {
+  const rad = degToRadSVG(deg);
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+function drawTicks() {
+  const g = document.getElementById('ticks'); g.innerHTML = '';
+  const cx=180,cy=180,rOuter=140,rInnerLong=125,rInnerShort=132;
+  for(let deg=0;deg<360;deg+=15){
+    const long = deg%45===0;
+    const outer = pointOnCircle(cx,cy,rOuter,deg);
+    const inner = pointOnCircle(cx,cy,long?rInnerLong:rInnerShort,deg);
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',outer.x); line.setAttribute('y1',outer.y);
+    line.setAttribute('x2',inner.x); line.setAttribute('y2',inner.y);
+    line.setAttribute('stroke','#9ca3af'); line.setAttribute('stroke-width',long?2:1);
+    g.appendChild(line);
+    if(long){
+      const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+      const labelPoint = pointOnCircle(cx,cy,rInnerLong-18,deg);
+      txt.setAttribute('x',labelPoint.x); txt.setAttribute('y',labelPoint.y+4);
+      txt.setAttribute('text-anchor','middle'); txt.setAttribute('font-size','10');
+      txt.setAttribute('fill','#f9fafb'); txt.textContent = deg.toString(); g.appendChild(txt);
     }
-    function drawTicks() {
-      const g = document.getElementById('ticks'); g.innerHTML = '';
-      const cx=180,cy=180,rOuter=140,rInnerLong=125,rInnerShort=132;
-      for(let deg=0;deg<360;deg+=15){
-        const long = deg%45===0;
-        const outer = pointOnCircle(cx,cy,rOuter,deg);
-        const inner = pointOnCircle(cx,cy,long?rInnerLong:rInnerShort,deg);
-        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-        line.setAttribute('x1',outer.x); line.setAttribute('y1',outer.y);
-        line.setAttribute('x2',inner.x); line.setAttribute('y2',inner.y);
-        line.setAttribute('stroke','#cbd5e1'); line.setAttribute('stroke-width',long?2:1);
-        g.appendChild(line);
-        if(long){
-          const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
-          const labelPoint = pointOnCircle(cx,cy,rInnerLong-18,deg);
-          txt.setAttribute('x',labelPoint.x); txt.setAttribute('y',labelPoint.y+4);
-          txt.setAttribute('text-anchor','middle'); txt.setAttribute('font-size','12');
-          txt.setAttribute('fill','#334155'); txt.textContent = deg.toString(); g.appendChild(txt);
-        }
-      }
-    }
-    drawTicks();
+  }
+}
+drawTicks();
 
-    document.getElementById('compute').addEventListener('click', () => {
-      const windDirInput=parseFloat(document.getElementById('windDir').value);
-      const windSpeed=parseFloat(document.getElementById('windSpeed').value);
-      const tas=parseFloat(document.getElementById('tas').value);
-      const courseGeo=parseFloat(document.getElementById('course').value);
-      if([windDirInput,windSpeed,tas,courseGeo].some(v=>Number.isNaN(v))){alert('Wprowadź wszystkie wartości liczbowe!');return;}
+document.getElementById('compute').addEventListener('click', () => {
+  const windDirInput=parseFloat(document.getElementById('windDir').value);
+  const windSpeed=parseFloat(document.getElementById('windSpeed').value);
+  const tas=parseFloat(document.getElementById('tas').value);
+  const courseGeo=parseFloat(document.getElementById('course').value);
+  if([windDirInput,windSpeed,tas,courseGeo].some(v=>Number.isNaN(v))){alert('Wprowadź wszystkie wartości liczbowe!');return;}
 
-      const windDir = (windDirInput + 180)%360;
-      const courseTrue = (courseGeo - 5 + 360)%360;
-      let diff = Math.abs(windDir - courseTrue); if(diff>180) diff=360-diff;
-      const Xwind = Math.sin(diff * Math.PI/180) * windSpeed;
-      const Ywind = Math.cos(diff * Math.PI/180) * windSpeed;
-      const GS = Ywind * 60 / tas;
+  const windDir = (windDirInput + 180)%360;
+  const courseTrue = (courseGeo - 5 + 360)%360;
+  let diff = Math.abs(windDir - courseTrue); if(diff>180) diff=360-diff;
+  const Xwind = Math.sin(diff * Math.PI/180) * windSpeed;
+  const Ywind = Math.cos(diff * Math.PI/180) * windSpeed;
+  const GS = Ywind * 60 / tas;
 
-      document.getElementById('output').innerHTML = `
-        <p><strong>Kurs po poprawce:</strong> ${courseTrue.toFixed(1)}°</p><hr>
-        <p><strong>Kierunek wiatru:</strong> ${windDir.toFixed(1)}°</p><hr>
-        <p><strong>Różnica kątów |Δ|:</strong> ${diff.toFixed(1)}°</p><hr>
-        <p><strong>X wind:</strong> ${Xwind.toFixed(2)} kt</p><hr>
-        <p><strong>Y wind:</strong> ${Ywind.toFixed(2)} kt</p><hr>
-        <p><strong>GS (Ywind * 60 / TAS):</strong> ${GS.toFixed(2)}</p>
-      `;
+  document.getElementById('output').innerHTML = `
+    <p><strong>Kurs po poprawce:</strong> ${courseTrue.toFixed(1)}°</p><hr>
+    <p><strong>Kierunek wiatru:</strong> ${windDir.toFixed(1)}°</p><hr>
+    <p><strong>Różnica kątów |Δ|:</strong> ${diff.toFixed(1)}°</p><hr>
+    <p><strong>X wind:</strong> ${Xwind.toFixed(2)} kt</p><hr>
+    <p><strong>Y wind:</strong> ${Ywind.toFixed(2)} kt</p><hr>
+    <p><strong>GS (Ywind * 60 / TAS):</strong> ${GS.toFixed(2)}</p>
+  `;
 
-      const cx=180,cy=180,r=120;
-      const windHead=pointOnCircle(cx,cy,r,windDir);
-      const windTail=pointOnCircle(cx,cy,r,(windDir+180)%360);
-      const courseHead=pointOnCircle(cx,cy,r,courseTrue);
-      const courseTail=pointOnCircle(cx,cy,r,(courseTrue+180)%360);
+  const cx=180,cy=180,r=120;
+  const windHead=pointOnCircle(cx,cy,r,windDir);
+  const windTail=pointOnCircle(cx,cy,r,(windDir+180)%360);
+  const courseHead=pointOnCircle(cx,cy,r,courseTrue);
+  const courseTail=pointOnCircle(cx,cy,r,(courseTrue+180)%360);
 
-      const windLine=document.getElementById('windVector');
-      windLine.setAttribute('x1',windTail.x); windLine.setAttribute('y1',windTail.y);
-      windLine.setAttribute('x2',windHead.x); windLine.setAttribute('y2',windHead.y);
+  const windLine=document.getElementById('windVector');
+  windLine.setAttribute('x1',windTail.x); windLine.setAttribute('y1',windTail.y);
+  windLine.setAttribute('x2',windHead.x); windLine.setAttribute('y2',windHead.y);
 
-      const courseLine=document.getElementById('courseVector');
-      courseLine.setAttribute('x1',courseTail.x); courseLine.setAttribute('y1',courseTail.y);
-      courseLine.setAttribute('x2',courseHead.x); courseLine.setAttribute('y2',courseHead.y);
-    });
+  const courseLine=document.getElementById('courseVector');
+  courseLine.setAttribute('x1',courseTail.x); courseLine.setAttribute('y1',courseTail.y);
+  courseLine.setAttribute('x2',courseHead.x); courseLine.setAttribute('y2',courseHead.y);
+});
 
-    document.getElementById('reset').addEventListener('click',()=>{
-      document.getElementById('windDir').value='';
-      document.getElementById('windSpeed').value='';
-      document.getElementById('tas').value='';
-      document.getElementById('course').value='';
-      const windLine=document.getElementById('windVector');
-      const courseLine=document.getElementById('courseVector');
-      windLine.setAttribute('x1',180); windLine.setAttribute('y1',320);
-      windLine.setAttribute('x2',180); windLine.setAttribute('y2',40);
-      courseLine.setAttribute('x1',180); courseLine.setAttribute('y1',320);
-      courseLine.setAttribute('x2',180); courseLine.setAttribute('y2',40);
-      document.getElementById('output').innerHTML='<p><em>Wprowadź dane i kliknij „Oblicz i narysuj”.</em></p>';
-    });
-  </script>
+document.getElementById('reset').addEventListener('click',()=>{
+  document.getElementById('windDir').value='';
+  document.getElementById('windSpeed').value='';
+  document.getElementById('tas').value='';
+  document.getElementById('course').value='';
+  const windLine=document.getElementById('windVector');
+  const courseLine=document.getElementById('courseVector');
+  windLine.setAttribute('x1',180); windLine.setAttribute('y1',320);
+  windLine.setAttribute('x2',180); windLine.setAttribute('y2',40);
+  courseLine.setAttribute('x1',180); courseLine.setAttribute('y1',320);
+  courseLine.setAttribute('x2',180); courseLine.setAttribute('y2',40);
+  document.getElementById('output').innerHTML='<p><em>Wprowadź dane i kliknij „Oblicz i narysuj”.</em></p>';
+});
+</script>
 </body>
 </html>
